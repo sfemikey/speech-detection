@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Speech Detection</title>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@100&family=Roboto+Condensed&family=Sigmar+One&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="header">
+  <h1>- Speech Detection -</h1>
+</div>
+  <div class="words" contenteditable>
+  </div>
+
+<script>
+  window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+const recognition = new SpeechRecognition();
+recognition.interimResults = true;
+
+let p = document.createElement('p');
+const words = document.querySelector('.words');
+words.appendChild(p);
+
+recognition.addEventListener('result', e => {
+  const transcript = Array.from(e.results)
+  .map(result => result[0])
+  .map(result => result.transcript)
+  .join('')
+
+  p.textContent = transcript;
+  if(e.results[0].isFinal) {
+    p = document.createElement('p');
+    words.appendChild(p);
+  }
+  console.log(transcript);
+});
+
+recognition.addEventListener('end', recognition.start);
+
+recognition.start();
+
+</script>
+
+
+  <style>
+    html {
+      font-size: 16px;
+    }
+
+    body {
+      font-family: Roboto Condensed;
+      font-weight: 200;
+      background-image: url(bg1.png);
+    }
+
+    h1 {
+      color: white;
+      text-align:center;
+      font-family: Sigmar One;
+      background-color:black;
+      padding:30px 0 30px 0;
+      font-size:45px;
+    }
+    .words {
+      max-width: 500px;
+      margin: 50px auto;
+      background: white;
+      border-radius: 5px;
+      box-shadow: 15px 15px 0 rgb(0 0 0 / 20%);
+      padding: 4rem 4rem 1rem 4rem;
+      background-size: 100% 3rem;
+      position: relative;
+      line-height: 3rem;
+    }
+
+    p {
+      margin: 0 0 1rem;
+      border-top: 1px solid cadetblue;
+    }
+
+    .words:before {
+      content: '';
+      position: absolute;
+      width: 4px;
+      top: 0;
+      left: 30px;
+      bottom: 0;
+    }
+  </style>
+
+</body>
+</html>
